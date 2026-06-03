@@ -3,8 +3,8 @@ from rest_framework.permissions import AllowAny
 from .serializers import PostSerializer, CommentSerializer
 from . models import Post, Comment
 
-class PostCreateAPIView(generics.CreateAPIView):
+class PostCreateAPIView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     permission_classes = [AllowAny]
-    serializer_classes = PostSerializer
+    serializer_class = PostSerializer
     
