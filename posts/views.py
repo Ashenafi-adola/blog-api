@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from .serializers import PostSerializer, CommentSerializer
+from . models import Post, Comment
 
-# Create your views here.
+class PostCreateAPIView(generics.CreateAPIView):
+    queryset = Post.objects.all()
+    permission_classes = [AllowAny]
+    serializer_classes = PostSerializer
+    
