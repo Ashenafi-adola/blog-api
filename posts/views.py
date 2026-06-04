@@ -27,3 +27,17 @@ class HomeAPIView(generics.ListAPIView):
     queryset = Post.objects.all()
     permission_classes = [AllowAny]
     serializer_class = PostSerializer
+
+class AddCommentAPIView(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = CommentSerializer
+
+    def get_object(self):
+        return Post.objects.get(id=self.kwargs['id'])
+    
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.post = self.get_object()
+            serializer.save()
+        
