@@ -3,8 +3,27 @@ from rest_framework.permissions import AllowAny
 from .serializers import PostSerializer, CommentSerializer
 from . models import Post, Comment
 
-class PostCreateAPIView(generics.ListCreateAPIView):
+class PostCreateAPIView(generics.CreateAPIView):
     queryset = Post.objects.all()
     permission_classes = [AllowAny]
     serializer_class = PostSerializer
     
+
+class PostUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = PostSerializer
+
+    def get_object(self):
+        return Post.objects.get(id=self.kwargs['pk'])
+
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+    
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
+    
+class HomeAPIView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = PostSerializer
