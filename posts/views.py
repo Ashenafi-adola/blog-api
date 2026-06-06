@@ -7,6 +7,10 @@ class PostCreateAPIView(generics.CreateAPIView):
     queryset = Post.objects.all()
     permission_classes = [AllowAny]
     serializer_class = PostSerializer
+
+    def post(self, request, *args, **kwargs):
+        print("data posted")
+        return super().post(request, *args, **kwargs)
     
 
 class PostUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
