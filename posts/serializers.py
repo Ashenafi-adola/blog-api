@@ -9,7 +9,7 @@ class PostSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['text']
+        fields = ['id', 'text']
 
 class ReactionSerializer(serializers.ModelSerializer):
     class Meta:

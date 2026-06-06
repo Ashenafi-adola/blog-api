@@ -29,7 +29,7 @@ class PostUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
         return super().perform_destroy(instance)
     
 class HomeAPIView(generics.ListAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by('-posted_at')
     permission_classes = [AllowAny]
     serializer_class = PostSerializer
 
@@ -38,7 +38,7 @@ class AddCommentAPIView(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
 
     def get_queryset(self):
-        return Comment.objects.filter(post=self.kwargs['pk'])
+        return Comment.objects.filter(post=self.kwargs['pk']).order_by('-date')
 
     def get_object(self):
         return Post.objects.get(id=self.kwargs['pk'])
@@ -52,19 +52,15 @@ class ReactAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        return Reaction.objects.filter(post=self.get_object())
+        return Reaction.objects.all()
     
     def get_object(self):
-        return Post.objects.get(id=self.kwargs['pk'])
-    
+        post = Post.objects.get(id=self.kwargs['pk'])
+        instance, created = Reaction.objects.get_or_create(post=post)
+        return instance
+
+    def put(self, request, *args, **kwargs):
+        print(request.data)
+        return super().put(request, *args, **kwargs)
     def perform_update(self, serializer):
-        if serializer.is_valid():
-            serializer.save()
-            instance = Reaction.objects.get(post=self.get_object())
-            instance.likes = serializer.data['likes']
-            instance.dislikes = serializer.data['dislikes']
-            instance.save()
-            print(serializer.data['likes'])
-            print(Reaction.objects.get(post=self.get_object()).likes)
-        else:
-            print(serializer.error)
+        serializer.save()
