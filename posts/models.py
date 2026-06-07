@@ -3,7 +3,7 @@ from datetime import datetime
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='media/images/', null=True, blank=True)
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
     description = models.TextField()
     posted_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
