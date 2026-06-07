@@ -6,5 +6,5 @@ urlpatterns = [
     path('home/', views.HomeAPIView.as_view(), name= 'home'),
     path('post-detail/<int:pk>/', views.PostUpdateDeleteAPIView.as_view(), name='post-detail'),
     path('add-comment/<int:pk>/', views.AddCommentAPIView.as_view(), name="add-comment"),
-    path('post-reaction/<int:pk>/', views.ReactAPIView.as_view(), name="reaction")
+    path('post-like/<int:pk>/', views.LikeAPIView.as_view(), name="like")
 ]
