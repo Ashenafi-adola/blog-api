@@ -29,15 +29,13 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 REST_FRAMEWORK = {
-    
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated"
+        "rest_framework.permissions.IsAuthenticated",
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
 }
-
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
@@ -76,9 +74,6 @@ ROOT_URLCONF = 'backend.urls'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
-
-CORS_ALLOWS_ALL_ORIGINS = True
-CORS_ALLOWS_CREDENTIALS = True
 
 TEMPLATES = [
     {
@@ -149,3 +144,12 @@ STATICFILES_DIR = (
 )
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Use explicit allowed origins (defined above) and enable credentials.
+# Do NOT use CORS_ALLOW_ALL_ORIGINS=True together with credentials.
+CORS_ALLOW_CREDENTIALS = True
+
+LOGIN_REDIRECT_URL = "/posts/create-post/"
+LOGOUT_REDIRECT_URL = "/api-auth/login/"

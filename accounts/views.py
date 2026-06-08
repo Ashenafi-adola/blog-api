@@ -8,3 +8,11 @@ class CreateAccountAPIView(generics.CreateAPIView):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
     permission_classes = [AllowAny]
+
+
+class GetUserIdAPIView(generics.RetrieveAPIView):
+    serializer_class = AccountSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Account.objects.get(id=self.request.user)

@@ -29,3 +29,7 @@ class Like(models.Model):
 class Dislike(models.Model):
     user = models.ManyToManyField(Account, related_name='dislikes')
     post = models.OneToOneField(Post, on_delete=models.CASCADE)
+
+class Views(models.Model):
+    user = models.ManyToManyField(Account, related_name='views')
+    post = models.OneToOneField(Post, on_delete=models.CASCADE)
