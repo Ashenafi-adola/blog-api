@@ -1,8 +1,9 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import PostSerializer, CommentSerializer, LikeSerializer, DislikeSerializer, ViewsSerializer
 from . models import Post, Comment, Like,Dislike, Views
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.response import Response
 
 class PostCreateAPIView(generics.CreateAPIView):
     queryset = Post.objects.all()
@@ -29,7 +30,24 @@ class PostUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
         return Post.objects.get(id=self.kwargs['pk'])
 
     def perform_update(self, serializer):
-        return super().perform_update(serializer)
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            print("an error occured")    
+    def put(self, request, *args, **kwargs):
+        serializer = PostSerializer(
+            self.get_object(),
+            data=request.data,
+            partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()
+            print('saved')
+            return Response(serializer.data)
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
     
     def perform_destroy(self, instance):
         if instance.user == self.request.user:
@@ -56,6 +74,35 @@ class AddCommentAPIView(generics.ListCreateAPIView):
         if serializer.is_valid():
             serializer.save(post=self.get_object(), user=self.request.user)
             print("commented")
+
+class EditDestroyCommentAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+
+    def get_object(self):
+        return Comment.objects.get(id=self.kwargs['pk'])
+
+    def perform_update(self, serializer):
+        if serializer.is_valid():
+            serializer.save()
+        return super().perform_update(serializer)
+    
+    def put(self, request, *args, **kwargs):
+        serializer = CommentSerializer(
+            self.get_object(),
+            data = request.data,
+            partial=True
+        )
+        print('put method invoked')
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 class LikeAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = LikeSerializer

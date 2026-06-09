@@ -8,6 +8,7 @@ class PostSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {'user':{'read_only':True}}
 
+
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
     class Meta:
