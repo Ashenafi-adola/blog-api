@@ -35,16 +35,30 @@ class PostUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     def perform_update(self, serializer):
         if serializer.is_valid():
             serializer.save()
-         
+
     def put(self, request, *args, **kwargs):
+        
         serializer = PostSerializer(
             self.get_object(),
             data=request.data,
             partial=True
         )
+        data = request.data.copy()
+
+        if 'image' not in request.FILES:
+            if type(data['image']) == str:
+                data.pop('image')
+
+        serializer = PostSerializer(
+            self.get_object(),
+            data=data,
+            partial=True
+        )
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+
         return Response(
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
