@@ -12,9 +12,8 @@ class CreateAccountAPIView(generics.CreateAPIView):
 
 class GetUserIdAPIView(generics.RetrieveAPIView):
     serializer_class = AccountSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     lookup_field = 'username'
 
     def get_queryset(self):
-        print(self.kwargs)
         return Account.objects.filter(username=self.kwargs['username'])
