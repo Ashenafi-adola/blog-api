@@ -155,8 +155,6 @@ class EditDestroyCommentAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
 
-    http_method_names = ['like', 'dislike']
-
     def get_object(self):
         return Comment.objects.get(id=self.kwargs['pk'])
 
@@ -180,100 +178,3 @@ class EditDestroyCommentAPIView(generics.RetrieveUpdateDestroyAPIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
-
-# class LikeAPIView(generics.RetrieveUpdateAPIView):
-#     serializer_class = LikeSerializer
-#     permission_classes = [AllowAny]
-
-#     def get_queryset(self):
-#         return Like.objects.all()
-    
-#     def get_object(self):
-#         post = Post.objects.get(id=self.kwargs['pk'])
-#         instance, created = Like.objects.get_or_create(post=post)
-#         return instance
-
-#     def put(self, request, *args, **kwargs):
-#         userId = self.request.user.id
-#         users = self.request.data['user']
-#         post = Post.objects.get(id=self.kwargs['pk'])
-#         dislike = Dislike.objects.get(post=post)
-
-#         if userId in users:
-#             users.remove(userId)
-#             self.request.data['user'] = users
-#         else:
-#             users.append(userId)
-#             self.request.data['user'] = users
-        
-#         serializer = LikeSerializer(
-#             Like.objects.get(post=post),
-#             data= self.request.data,
-#             partial=True
-#         )
-#         if serializer.is_valid():
-#             serializer.save()
-#             if self.request.user in dislike.user.all():
-#                 dislike.user.remove(self.request.user)
-#             print("saved")
-#             return Response(serializer.data)
-
-#         return Response(
-#             serializer.errors,
-#             status=status.HTTP_400_BAD_REQUEST
-#         )
-#     def perform_update(self, serializer):
-#         serializer.save()
-
-# class DisLikeAPIView(generics.RetrieveUpdateAPIView):
-#     serializer_class = DislikeSerializer
-#     permission_classes = [AllowAny]
-
-#     def get_queryset(self):
-#         return Dislike.objects.all()
-    
-#     def get_object(self):
-#         post = Post.objects.get(id=self.kwargs['pk'])
-#         instance, created = Dislike.objects.get_or_create(post=post)
-#         return instance
-
-#     def put(self, request, *args, **kwargs):
-#         userId = self.request.user.id
-#         users = self.request.data['user']
-#         post = Post.objects.get(id=self.kwargs['pk'])
-#         like = Like.objects.get(post=post)
-
-#         if userId in users:
-#             users.remove(userId)
-#             self.request.data['user'] = users
-#         else:
-#             users.append(userId)
-#             self.request.data['user'] = users
-        
-#         serializer = LikeSerializer(
-#             Dislike.objects.get(post=post),
-#             data= self.request.data,
-#             partial=True
-#         )
-#         if serializer.is_valid():
-#             serializer.save()
-#             if self.request.user in like.user.all():
-#                 like.user.remove(self.request.user)
-#             print("saved")
-#             return Response(serializer.data)
-
-#         return Response(
-#             serializer.errors,
-#             status=status.HTTP_400_BAD_REQUEST
-#         )
-#     def perform_update(self, serializer):
-#         serializer.save()
-
-# class ViewsAPIView(generics.RetrieveAPIView):
-#     serializer_class = ViewsSerializer
-#     permission_classes = [AllowAny]
-#     queryset = Views.objects.all()
-
-#     def get_object(self):
-#         post = Post.objects.get(id=self.kwargs['pk'])
-#         return Views.objects.get(post=post)
