@@ -75,14 +75,16 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
 
-CORS_ALLOWED_HTTP_METHODS = [
-    'POST',
-    'GET',
-    'PUT',
-    'PATCH',
-    'LIKE',
-    'DISLIKE',
-]
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+    "LIKE",
+    "DISLIKE",
+)
 
 TEMPLATES = [
     {

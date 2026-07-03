@@ -1,3 +1,5 @@
 from django.test import TestCase
+import requests
 
-# Create your tests here.
+def end_point_test(TestCase):
+    pass
