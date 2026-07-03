@@ -40,3 +40,14 @@ DATABASES = {
         conn_max_age=600
     )
 }
+
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+    "LIKE",
+    "DISLIKE",
+)
