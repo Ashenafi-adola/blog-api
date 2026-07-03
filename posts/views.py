@@ -64,6 +64,51 @@ class PostUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
             status=status.HTTP_400_BAD_REQUEST
         )
     
+    def like(self, request, *args, **kwargs):
+        user_id = self.reuest.user.id
+        like = Like.objects.get(post=self.kwargs['pk'])
+        likes = like.user.all()
+        dislike = Dislike.objects.get(post=self.kwargs['pk'])
+        dislikes = dislike.user.all()
+
+        if self.request.user in likes:
+            like.user.remove(self.request.user)
+        else:
+            like.user.add(self.request.user)
+            if self.request.user in dislikes:
+                dislike.user.remove(self.request.user)
+        
+        serializer = LikeSerializer(
+            Like.objects.get(post=self.kwargs['pk']),
+            data= self.request.data,
+            partial=True
+        )
+        return Response(
+            serializer.data
+        )
+    
+    def dislike(self, request, *args, **kwargs):
+        like = Like.objects.get(post=self.kwargs['pk'])
+        likes = like.user.all()
+        dislike = Dislike.objects.get(post=self.kwargs['pk'])
+        dislikes = dislike.user.all()
+
+        if self.request.user in dislikes:
+            dislike.user.remove(self.request.user)
+        else:
+            dislike.user.add(self.request.user)
+            if self.request.user in likes:
+                like.user.remove(self.request.user)
+        
+        serializer = LikeSerializer(
+            Like.objects.get(post=self.kwargs['pk']),
+            data= self.request.data,
+            partial=True
+        )
+        return Response(
+            serializer.data
+        )
+        
     def perform_destroy(self, instance):
         if instance.user == self.request.user:
             return super().perform_destroy(instance)
@@ -93,6 +138,8 @@ class EditDestroyCommentAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
+
+    http_method_names = ['like', 'dislike']
 
     def get_object(self):
         return Comment.objects.get(id=self.kwargs['pk'])
