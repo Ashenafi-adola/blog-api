@@ -3,7 +3,7 @@ from .settings import *
 import dj_database_url
 from .settings import BASE_DIR
 
-ALLOWED_HOSTS= (os.environ.get('RENDER_EXTERNAL_HOSTNAME'))
+ALLOWED_HOSTS = (os.environ.get('RENDER_EXTERNAL_HOSTNAME'),)
 CSRF_THRUSTED_ORIGINS = ['https://'+os.environ.get("RENDER_EXTERNAL_HOSTNAME")]
 DEBUG = False
 SECRET_KEY = os.environ.get("SECRET_KEY")
